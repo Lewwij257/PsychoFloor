@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,6 +12,13 @@ public class EnemyManager : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] public GameManager gameManager;
+
+
+    [Header("Bullet visual")]
+    [SerializeField] private GameObject tracePrefab;
+    [SerializeField] private int tracePoolSize = 10;
+    private Queue<TraceEffect> tracePool = new Queue<TraceEffect>();
+
 
     public GameObject testProjectile;
 
@@ -38,6 +47,7 @@ public class EnemyManager : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameManager.Instance.Player.transform;
+        InitializeTracePool();
     }
 
     private void Update()
@@ -79,9 +89,11 @@ public class EnemyManager : MonoBehaviour
 
             ///attack code
 
-            Rigidbody rb = Instantiate(testProjectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            rb.AddForce(transform.forward * 8f, ForceMode.Impulse);
+            //Rigidbody rb = Instantiate(testProjectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+            //rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+            //rb.AddForce(transform.forward * 8f, ForceMode.Impulse);
+
+            DrawShotLIne();
 
 
             ///
@@ -128,6 +140,31 @@ public class EnemyManager : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
+    }
+
+    private void InitializeTracePool()
+    {
+        for (int i = 0; i < tracePoolSize; i++)
+        {
+            GameObject obj = Instantiate(tracePrefab);
+            obj.SetActive(false);
+            TraceEffect effect = obj.GetComponent<TraceEffect>();
+            if (effect != null)
+            {
+                TraceEffect captured = effect;
+                captured.OnComplete += (captured) => tracePool.Enqueue(captured);
+                tracePool.Enqueue(captured);
+            }
+        }
+    }
+
+    private void DrawShotLIne()
+    {
+        if (tracePool.Count > 0)
+        {
+            TraceEffect effect = tracePool.Dequeue();
+            effect.Play(transform.position, player.transform.position);
+        }
     }
 
 
