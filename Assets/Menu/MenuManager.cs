@@ -7,10 +7,15 @@ public class MenuManager : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] private CinemachineCamera menuCamera;
     [SerializeField] private CinemachineCamera settingsCamera;
+    [SerializeField] private CinemachineCamera creditsCamera;
 
     [Header("Settings UI")]
     [SerializeField] private GameObject settingsContent;
-    [SerializeField] private Toggle exitToggle;
+    [SerializeField] private Toggle settingsExitToggle;
+
+    [Header("Credits UI")]
+    [SerializeField] private GameObject creditsContent;
+    [SerializeField] private Button creditsExitButton;
 
     [Header("Paper Buttons")]
     [SerializeField] private MenuPaper[] papers;
@@ -23,79 +28,100 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip exitSound;
 
-    private bool inSettings = false;
+    private enum MenuState
+    {
+        Main,
+        Settings,
+        Credits
+    }
+
+    private MenuState currentState = MenuState.Main;
 
     private void Awake()
     {
-        ShowMenu(false);
+        ShowMain();
+    }
+
+    public void ShowMain()
+    {
+        currentState = MenuState.Main;
+        UpdateMenu();
     }
 
     public void OpenSettings()
     {
-        if (inSettings)
-            return;
-
-        ShowMenu(true);
+        if (currentState == MenuState.Settings) return;
+        currentState = MenuState.Settings;
+        UpdateMenu();
     }
 
     public void ExitSettings(bool value)
     {
-        if (!value)
-            return;
-
-        if (!inSettings)
-            return;
-
-        if (audioSource != null && exitSound != null)
-        {
-            audioSource.PlayOneShot(exitSound);
-        }
-
-        ShowMenu(false);
+        if (!value) return;
+        if (currentState != MenuState.Settings) return;
+        PlayExitSound();
+        ShowMain();
     }
 
-    private void ShowMenu(bool settings)
+    public void OpenCredits()
     {
-        inSettings = settings;
+        if (currentState == MenuState.Credits) return;
+        currentState = MenuState.Credits;
+        UpdateMenu();
+    }
 
-        // Камеры
-        menuCamera.Priority = settings
-            ? inactivePriority
-            : activePriority;
+    public void ExitCredits()
+    {
+        if (currentState != MenuState.Credits) return;
+        ShowMain();
+    }
 
-        settingsCamera.Priority = settings
+    private void UpdateMenu()
+    {
+        bool isMain = currentState == MenuState.Main;
+        bool isSettings = currentState == MenuState.Settings;
+        bool isCredits = currentState == MenuState.Credits;
+
+        menuCamera.Priority = isMain
             ? activePriority
             : inactivePriority;
 
-        // Содержимое настроек
-        if (settingsContent != null)
+        settingsCamera.Priority = isSettings
+            ? activePriority
+            : inactivePriority;
+
+        creditsCamera.Priority = isCredits
+            ? activePriority
+            : inactivePriority;
+
+        if (settingsContent != null) settingsContent.SetActive(isSettings);
+
+        if (settingsExitToggle != null)
         {
-            settingsContent.SetActive(settings);
+            settingsExitToggle.gameObject.SetActive(true);
+            settingsExitToggle.interactable = isSettings;
+
+            if (isSettings)settingsExitToggle.SetIsOnWithoutNotify(false);
         }
 
-        // Toggle выхода
-        if (exitToggle != null)
+        if (creditsContent != null) creditsContent.SetActive(isCredits);
+
+        if (creditsExitButton != null)
         {
-            // Toggle всегда виден
-            exitToggle.gameObject.SetActive(true);
-
-            // Но реагирует только внутри настроек
-            exitToggle.interactable = settings;
-
-            // При входе всегда сбрасываем его
-            if (settings)
-            {
-                exitToggle.SetIsOnWithoutNotify(false);
-            }
+            creditsExitButton.gameObject.SetActive(true);
+            creditsExitButton.interactable = isCredits;
         }
 
-        // Листы
+        bool papersEnabled = isMain;
+
         foreach (MenuPaper paper in papers)
         {
-            if (paper != null)
-            {
-                paper.SetEnabled(!settings);
-            }
+            if (paper != null)paper.SetEnabled(papersEnabled);
         }
+    }
+
+    private void PlayExitSound()
+    {
+        if (audioSource != null && exitSound != null) audioSource.PlayOneShot(exitSound);
     }
 }
