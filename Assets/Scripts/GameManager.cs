@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+    public LayerMask PlayerLayer;
 
 
     public int enemiesKilledOnCurrentFloor;
