@@ -1,9 +1,39 @@
 fileFormatVersion: 2
-guid: 42aab744d129a144bb69b5cb968c1e7d
+guid: 0d3182f96b94b5545a5a0922403a0ff8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlackGlass
+    second: {fileID: 2100000, guid: 93cddf435d1621b41a7adfa6eb9060a1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlackPlastic
+    second: {fileID: 2100000, guid: c9280c07c6e83c948a04aa45678c7b23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Soldier_body1
+    second: {fileID: 2100000, guid: 87f8aecab393be745ac22639d3bb5f8d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Soldier_head6
+    second: {fileID: 2100000, guid: c1edae5a2d889794f9e38183f4acf5e2, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Soldier_Body_diffuse
+    second: {fileID: 2800000, guid: a04783df57ead0a4f8dbfc0ba9114bce, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Soldier_head_diffuse
+    second: {fileID: 2800000, guid: f40201c0ffda0f74aafedb750c4c58ea, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
