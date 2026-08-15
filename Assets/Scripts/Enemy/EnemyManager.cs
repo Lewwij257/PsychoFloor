@@ -46,8 +46,12 @@ public class EnemyManager : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameManager.Instance.Player.transform;
         InitializeTracePool();
+    }
+
+    private void Start()
+    {
+        player = GameManager.Instance.Player.transform;
     }
 
     private void Update()
