@@ -16,10 +16,21 @@ public class Pistol : WeaponBase
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            // Проверяем слой Enemy
+            // === Определяем тип поверхности ===
+            SurfaceType surface = SurfaceType.Default;
+            var surfaceIdentifier = hit.collider.GetComponent<SurfaceIdentifier>();
+            if (surfaceIdentifier != null)
+                surface = surfaceIdentifier.SurfaceType;
+
+            // === Спавним импакт (как в твоём примере) ===
+            Quaternion impactRot = Quaternion.LookRotation(-ray.direction, hit.normal);
+            ImpactManager.Instance?.SpawnImpact(hit.point, impactRot, surface);
+
+            // === Проверяем слой Enemy ===
             if (hitObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 var finalDamage = damage;
+
                 // Определяем часть тела по тегу
                 string bodyPart = hitObject.tag;
 
@@ -28,24 +39,20 @@ public class Pistol : WeaponBase
                     case "Head":
                         finalDamage = finalDamage * 3;
                         break;
-
                     case "Torso":
-
+                        // Можно оставить как есть или добавить множитель
                         break;
-
                     default:
                         break;
                 }
 
                 GameObject enemyObject = hitObject.transform.root.gameObject;
                 enemyObject.GetComponent<EnemyManager>().TakeDamage(finalDamage);
-
             }
         }
 
         Debug.DrawRay(muzzle.position, muzzle.forward * range, Color.red, 0.5f);
     }
-
     public override void Reload()
     {
         Debug.Log("Pistol reloaded!");
