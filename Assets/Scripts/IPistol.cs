@@ -6,10 +6,13 @@ public class Pistol : WeaponBase
     [SerializeField] private float range = 100f;
     [SerializeField] private LayerMask shootableLayers;
     [SerializeField] private int damage = 34;
+    
+
 
     public override void FireOnce()
     {
 
+        
 
         GameManager.Instance.shotsOnCurrentFloor += 1;
 
@@ -64,6 +67,6 @@ public class Pistol : WeaponBase
     }
     public override void Reload()
     {
-        Debug.Log("Pistol reloaded!");
+    
     }
 }

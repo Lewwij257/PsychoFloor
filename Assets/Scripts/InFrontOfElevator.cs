@@ -11,7 +11,6 @@ public class TriggerZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("TRIGGER ENTER!");
         onTriggerEnter?.Invoke(other);
     }
 

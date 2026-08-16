@@ -10,6 +10,13 @@ public class WeaponController : MonoBehaviour
     [Header("Ammo")]
     [SerializeField] private int maxAmmo = 12;
     [SerializeField] private int totalAmmo = 48;
+
+    [SerializeField] public AudioSource pistolAudioSource;
+    [SerializeField] public AudioClip shotClip;
+    [SerializeField] public AudioClip reloadClip;
+    [SerializeField] public AudioClip bulletsOnFloorClip;
+
+
     private int currentAmmo;
 
     [Header("Reload")]
@@ -29,6 +36,8 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
+        GameManager.Instance.MagPanel.text = (currentAmmo.ToString() + " / " + totalAmmo.ToString());
+             
         // Перезарядка по R
         if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentAmmo < maxAmmo && totalAmmo > 0)
             StartReload();
@@ -40,8 +49,17 @@ public class WeaponController : MonoBehaviour
             if (fireCooldown <= 0f) canFire = true;
         }
 
-        bool isFiring = playerController.fire;
 
+
+        //Debug.Log(GameManager.Instance.Player.GetComponent<PlayerController>().fire);
+        bool isFiring = GameManager.Instance.Player.GetComponent<PlayerController>().fire;
+
+
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager.Instance is null! Игнорируем выстрел.");
+            return;
+        }
         // Стрельба (только если не перезарядка, есть патроны)
         if (!isReloading && isFiring && canFire && !wasFiring && currentAmmo > 0)
         {
@@ -58,7 +76,7 @@ public class WeaponController : MonoBehaviour
         currentAmmo--;
         weaponSwayAndBob.Shoot();
         weapon.FireOnce();
-
+        pistolAudioSource.PlayOneShot(shotClip);
         // Автоперезарядка если патроны кончились
         if (currentAmmo == 0 && totalAmmo > 0)
             StartReload();
@@ -66,6 +84,8 @@ public class WeaponController : MonoBehaviour
 
     private void StartReload()
     {
+        pistolAudioSource.PlayOneShot(reloadClip);
+        pistolAudioSource.PlayOneShot(bulletsOnFloorClip);
         if (isReloading) return;
         isReloading = true;
         StartCoroutine(ReloadRoutine());

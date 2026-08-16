@@ -16,11 +16,11 @@ public class PlayerController : MonoBehaviour
     public int maxHealth = 500;
     public int currentHealth = 500;
     
-
+    public bool firePermission = true;
 
     private CharacterController characterController;
     private CinemachineCamera cinemachineCamera;
-    private Vector2 move;
+    public Vector2 move;
     private Vector3 velocity;
     public bool fire;
 
@@ -47,6 +47,12 @@ public class PlayerController : MonoBehaviour
 
         // Двигаем с учётом вертикали
         characterController.Move((movement + velocity) * Time.deltaTime);
+
+
+
+
+
+
     }
 
 
@@ -96,7 +102,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputValue inputValue)
     {
-        fire = inputValue.Get<float>() > 0.5f ? true : false;
+        if (firePermission)
+        {
+            fire = inputValue.Get<float>() > 0.5f ? true : false;
+
+        }
     }
 
     private Vector3 GetForward()
