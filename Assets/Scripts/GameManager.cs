@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     public float stopTime;
 
     public GameObject DeathPanel;
+    public TextMeshProUGUI MagPanel;
 
     public static GameManager Instance { get; private set; }
 
@@ -37,6 +39,16 @@ public class GameManager : MonoBehaviour
         // EnemyManager[] enemiesInLevel = FindObjectsByType<EnemyManager>();
     }
 
+    private void Start()
+    {
+        Debug.Log(Player);
+        Debug.Log(Player.GetComponent<PlayerController>());
+    }
+
+
+    private void Update()
+    {
+    }
 
 
     public float elapsedTime; // время прохождения этажа

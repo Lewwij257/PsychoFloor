@@ -24,11 +24,14 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         playerController = GameManager.Instance.Player.GetComponent<PlayerController>();
+        Debug.Log(playerController);
         currentAmmo = maxAmmo;
     }
 
     private void Update()
     {
+        GameManager.Instance.MagPanel.text = (currentAmmo.ToString() + " / " + totalAmmo.ToString());
+             
         // Перезарядка по R
         if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentAmmo < maxAmmo && totalAmmo > 0)
             StartReload();
@@ -40,11 +43,21 @@ public class WeaponController : MonoBehaviour
             if (fireCooldown <= 0f) canFire = true;
         }
 
-        bool isFiring = playerController.fire;
 
+
+        //Debug.Log(GameManager.Instance.Player.GetComponent<PlayerController>().fire);
+        bool isFiring = GameManager.Instance.Player.GetComponent<PlayerController>().fire;
+
+
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager.Instance is null! Игнорируем выстрел.");
+            return;
+        }
         // Стрельба (только если не перезарядка, есть патроны)
         if (!isReloading && isFiring && canFire && !wasFiring && currentAmmo > 0)
         {
+            Debug.Log("1");
             Fire();
             canFire = false;
             fireCooldown = fireRate;
