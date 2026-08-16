@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public float startTime;
     public float stopTime;
 
+    public GameObject DeathPanel;
+
 
     public static GameManager Instance { get; private set; }
 
@@ -29,11 +31,22 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+
+
+
+
+        EnemyManager[] enemiesInLevel = FindObjectsByType<EnemyManager>();
+
+
+
     }
 
 
 
-
+    public void GameOver()
+    {
+        DeathPanel.SetActive(true);
+    }
 
     /// LEVEL/ GAME? STATISTICKS
     /// 
