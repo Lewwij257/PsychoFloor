@@ -32,6 +32,8 @@ public class EnemyManager : MonoBehaviour
 
     private bool hasLineOfSight = false;
 
+    private bool Dead = false;
+
     public float maxHealth = 100f;
     public float currentHealth = 100f;
 
@@ -81,6 +83,12 @@ public class EnemyManager : MonoBehaviour
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
+
+
+        if (Dead == true)
+        {
+            return;
+        }
 
         // Проверяем прямую видимость каждый кадр
         CheckLineOfSight();
@@ -224,9 +232,20 @@ public class EnemyManager : MonoBehaviour
 
     public void Die()
     {
-        anim.SetTrigger("Death");
-        Invoke(nameof(DestroyEnemy), 2f);
+        Dead = true;
+        anim.SetInteger("Death", Random.Range(0, 4));
+        Invoke(nameof(DisableAnimatorAndObject), 0.7f);
     }
+
+    private void DisableAnimatorAndObject()
+    {
+        anim.SetBool("Dead", true);
+        this.enabled = false;
+        //anim.enabled = false;
+        //gameObject.SetActive(false);
+    }
+
+
 
 
 
