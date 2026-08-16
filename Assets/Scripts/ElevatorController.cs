@@ -42,14 +42,26 @@ public class ElevatorController : MonoBehaviour
 
     private void ShowStatsOnUI()
     {
-        killsText.text += GameManager.Instance.enemiesKilledOnCurrentFloor.ToString();
-        HeadshotsText.text += GameManager.Instance.headshotsOnCurrentFloor.ToString();
-        HitsText.text += GameManager.Instance.hitsOnCurrentFloor.ToString();
-        TimeText.text += 0.ToString();
-        DamageDealed.text += GameManager.Instance.damageDealedOnCurrentFloor.ToString();
-        DamageTaken.text += GameManager.Instance.damageTakenOnCurrentFloor.ToString();
-        Score.text += "!";
+        // Получаем менеджер
+        GameManager gm = GameManager.Instance;
 
+        // Останавливаем таймер (если ещё не остановлен)
+        gm.StopTimer();
+
+        // Заполняем тексты
+        killsText.text = "Убийств: " + gm.enemiesKilledOnCurrentFloor.ToString();
+        HeadshotsText.text = "Хэдшотов: " + gm.headshotsOnCurrentFloor.ToString();
+        HitsText.text = "Попаданий: " + gm.hitsOnCurrentFloor.ToString();
+        DamageDealed.text = "Нанесено урона: " + gm.damageDealedOnCurrentFloor.ToString();
+        DamageTaken.text = "Получено урона: " + gm.damageTakenOnCurrentFloor.ToString();
+        TimeText.text = "Время: " + gm.elapsedTime.ToString("F1") + " сек";
+
+        // Расчёт оценки
+        int score = gm.CalculateScore();
+        string rating = gm.GetRating(score);
+        string message = gm.GetRatingMessage(score);
+
+        Score.text = $"Оценка: {rating} ({score})";
     }
 
     private void OnPlayerEnterFront(Collider other)

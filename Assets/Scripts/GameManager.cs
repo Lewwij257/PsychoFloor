@@ -37,6 +37,22 @@ public class GameManager : MonoBehaviour
         // EnemyManager[] enemiesInLevel = FindObjectsByType<EnemyManager>();
     }
 
+
+
+    public float elapsedTime; // время прохождения этажа
+
+    public void StartTimer()
+    {
+        startTime = Time.time;
+    }
+
+    public void StopTimer()
+    {
+        stopTime = Time.time;
+        elapsedTime = stopTime - startTime;
+    }
+
+
     public void GameOver()
     {
         DeathPanel.SetActive(true);
@@ -103,5 +119,57 @@ public class GameManager : MonoBehaviour
     {
         if (Enemies.Contains(enemy))
             Enemies.Remove(enemy);
+    }
+
+
+    public int CalculateScore()
+    {
+        // 1. Точность
+        float accuracy = (shotsOnCurrentFloor > 0)
+            ? Mathf.Clamp01((float)hitsOnCurrentFloor / shotsOnCurrentFloor)
+            : 0f;
+
+        // 2. Хэдшоты
+        float headshotRatio = (enemiesKilledOnCurrentFloor > 0)
+            ? Mathf.Clamp01((float)headshotsOnCurrentFloor / enemiesKilledOnCurrentFloor)
+            : 0f;
+
+        // 3. Соотношение урона
+        float damageRatio = (damageTakenOnCurrentFloor + 1 > 0)
+            ? Mathf.Min((float)damageDealedOnCurrentFloor / (damageTakenOnCurrentFloor + 1), 5f) / 5f
+            : 0f;
+
+        // 4. Бонус за время (максимум 120 секунд)
+        float timeBonus = Mathf.Clamp01(1f - elapsedTime / 120f);
+
+        // 5. Базовый счёт
+        float score = accuracy * 30f + headshotRatio * 20f + damageRatio * 30f + timeBonus * 20f;
+
+        // 6. Штраф за оставшихся врагов
+        if (Enemies.Count > 0)
+            score -= 20f;
+
+        // 7. Приводим к целому и зажимаем
+        return Mathf.Clamp(Mathf.RoundToInt(score), 0, 100);
+    }
+
+    public string GetRating(int score)
+    {
+        if (score >= 90) return "S";
+        if (score >= 75) return "A";
+        if (score >= 60) return "B";
+        if (score >= 40) return "C";
+        if (score >= 20) return "D";
+        return "F";
+    }
+
+    public string GetRatingMessage(int score)
+    {
+        if (score >= 90) return "Идеальный забег! Вы – офисный ниндзя!";
+        if (score >= 75) return "Отлично! Вы эффективны и смертоносны.";
+        if (score >= 60) return "Хорошо, но есть куда расти.";
+        if (score >= 40) return "Средненько. Попробуйте быстрее и точнее.";
+        if (score >= 20) return "Плохо. Вас выгонят с такой эффективностью.";
+        return "Позор! Вы даже не справились с офисом!";
     }
 }
