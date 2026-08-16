@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,40 +25,39 @@ public class EnemyManager : MonoBehaviour
     public LayerMask playerLayer;
     public LayerMask groundLayer;
 
-    // НОВОЕ: слои, блокирующие обзор (стены, препятствия, земля)
     [Header("Line of Sight")]
-    public LayerMask obstacleMask;   // Назначить в инспекторе
+    public LayerMask obstacleMask;
 
     private bool hasLineOfSight = false;
-
     private bool Dead = false;
 
     public float maxHealth = 100f;
     public float currentHealth = 100f;
 
-    //Patroling
+    // Patroling
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
-    //Attack
+    // Attack
     public float timeBetweenAttacks;
     public bool alreadyAttacked;
 
-    //states
+    // states
     public float attackRange, sightRange;
     public bool playerInAttackRange, playerInSightRange;
 
-    private enum EnemyState
-    {
-        Idle,
-        Walk,
-        Run,
-        Fire
-    }
-    private EnemyState currentState = EnemyState.Idle;
+    // ===== НОВЫЕ ПОЛЯ ДЛЯ СТРЕЛЬБЫ =====
+    [Header("Shooting")]
+    public float damage = 10f;              // урон за выстрел
+    public float shootRange = 100f;         // дальность рейкаста
+    public float spreadAngle = 5f;          // разброс в градусах
+    public LayerMask shootableLayers;       // маска для рейкаста (игрок, стены, препятствия)
 
     [SerializeField] public Transform weaponMuzzle;
+
+    private enum EnemyState { Idle, Walk, Run, Fire }
+    private EnemyState currentState = EnemyState.Idle;
 
     private Animator anim;
 
@@ -73,10 +71,7 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         player = GameManager.Instance.Player.transform;
-        if (gameManager == null)
-        {
-            gameManager = GameManager.Instance;
-        }
+        if (gameManager == null) gameManager = GameManager.Instance;
     }
 
     private void Update()
@@ -84,13 +79,8 @@ public class EnemyManager : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
 
+        if (Dead) return;
 
-        if (Dead == true)
-        {
-            return;
-        }
-
-        // Проверяем прямую видимость каждый кадр
         CheckLineOfSight();
 
         agent.updateRotation = true;
@@ -109,13 +99,11 @@ public class EnemyManager : MonoBehaviour
         {
             if (hasLineOfSight)
             {
-                // Игрок виден – атакуем
                 AttackPlayer();
                 SetAnimation(EnemyState.Fire);
             }
             else
             {
-                // Игрок рядом, но скрыт за препятствием – идём к нему, чтобы найти точку для выстрела
                 ChasePlayer();
                 SetAnimation(EnemyState.Run);
             }
@@ -124,39 +112,24 @@ public class EnemyManager : MonoBehaviour
 
     private void CheckLineOfSight()
     {
-        if (player == null)
-        {
-            hasLineOfSight = false;
-            return;
-        }
+        if (player == null) { hasLineOfSight = false; return; }
 
-        // Начало луча – чуть выше центра врага, чтобы не задеть собственный коллайдер
         Vector3 origin = transform.position + Vector3.up * 1.5f;
-        // Конец луча – центр игрока (можно тоже приподнять)
         Vector3 target = player.position + Vector3.up * 1.2f;
-
         Vector3 direction = target - origin;
         float distance = direction.magnitude;
 
-        // Луч бьёт только по obstacleMask, игнорируя игрока и самого врага
         if (Physics.Raycast(origin, direction.normalized, distance, obstacleMask))
-        {
             hasLineOfSight = false;
-        }
         else
-        {
             hasLineOfSight = true;
-        }
     }
 
     private void Patroling()
     {
         if (!walkPointSet) SearchWalkPoint();
-
         if (walkPointSet) agent.SetDestination(walkPoint);
-
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
         if (distanceToWalkPoint.magnitude < 1)
         {
             walkPointSet = false;
@@ -169,10 +142,10 @@ public class EnemyManager : MonoBehaviour
         agent.SetDestination(player.position);
     }
 
+    // ========== ИЗМЕНЁННЫЙ AttackPlayer ==========
     private void AttackPlayer()
     {
         agent.SetDestination(transform.position);
-
         agent.updateRotation = false;
 
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
@@ -182,8 +155,8 @@ public class EnemyManager : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            DrawShotLine();
-            TriggerFire();
+            PerformShot();          // теперь стреляем через рейкаст
+            TriggerFire();          // анимация выстрела
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
@@ -192,31 +165,95 @@ public class EnemyManager : MonoBehaviour
         weaponObject.transform.rotation = Quaternion.LookRotation(dirToPlayer);
     }
 
+    // ========== НОВЫЙ МЕТОД СТРЕЛЬБЫ ==========
+    private void PerformShot()
+    {
+        if (player == null) return;
+
+        // Направление от дула к игроку
+        Vector3 baseDirection = (player.position - weaponMuzzle.position).normalized;
+
+        // Применяем разброс
+        Vector3 shootDirection = ApplySpread(baseDirection, spreadAngle);
+
+        Ray ray = new Ray(weaponMuzzle.position, shootDirection);
+        RaycastHit hit;
+        Vector3 hitPoint;
+        bool hitSomething = false;
+
+        if (Physics.Raycast(ray, out hit, shootRange, shootableLayers))
+        {
+            hitPoint = hit.point;
+            hitSomething = true;
+
+            // ---- Определение поверхности (если используется) ----
+            SurfaceType surface = SurfaceType.Default;
+            var surfaceIdentifier = hit.collider.GetComponent<SurfaceIdentifier>();
+            if (surfaceIdentifier != null)
+                surface = surfaceIdentifier.SurfaceType;
+
+            // ---- Спавн импакта ----
+            Quaternion impactRot = Quaternion.LookRotation(-ray.direction, hit.normal);
+            // ImpactManager – предполагается синглтон, если его нет – закомментируйте или замените на Instantiate
+            if (ImpactManager.Instance != null)
+                ImpactManager.Instance.SpawnImpact(hit.point, impactRot, surface);
+
+            // ---- Проверка попадания в игрока ----
+            if (hit.collider.CompareTag("Player"))
+            {
+                // Получаем компонент здоровья игрока (подставьте свой класс)
+                PlayerController playerController = hit.collider.GetComponentInParent<PlayerController>();
+                if (playerController != null)
+                    playerController.TakeDamage(40);
+            }
+        }
+        else
+        {
+            // Если никуда не попали – конечная точка на максимальной дистанции
+            hitPoint = weaponMuzzle.position + shootDirection * shootRange;
+        }
+
+        // Рисуем трассер (линию от дула до точки попадания)
+        DrawShotLine(weaponMuzzle.position, hitPoint);
+    }
+
+    // ========== РАЗБРОС ==========
+    private Vector3 ApplySpread(Vector3 direction, float spreadAngleDegrees)
+    {
+        if (spreadAngleDegrees <= 0) return direction.normalized;
+
+        float angleRad = spreadAngleDegrees * Mathf.Deg2Rad;
+        float radius = Mathf.Sqrt(Random.Range(0f, 1f)) * angleRad;
+        float theta = Random.Range(0f, 2f * Mathf.PI);
+
+        // Строим ортогональный базис
+        Vector3 up = Vector3.up;
+        if (Mathf.Abs(Vector3.Dot(direction, up)) > 0.99f)
+            up = Vector3.right;
+
+        Vector3 right = Vector3.Cross(direction, up).normalized;
+        Vector3 localUp = Vector3.Cross(right, direction).normalized;
+
+        Vector3 offset = (right * Mathf.Cos(theta) + localUp * Mathf.Sin(theta)) * radius;
+        return (direction + offset).normalized;
+    }
+
     private void ResetAttack()
     {
         alreadyAttacked = false;
         if (playerInSightRange && !playerInAttackRange)
-        {
             SetAnimation(EnemyState.Run);
-        }
         else if (!playerInSightRange && !playerInAttackRange)
-        {
             SetAnimation(EnemyState.Walk);
-        }
         else if (playerInAttackRange && playerInSightRange && hasLineOfSight)
-        {
             SetAnimation(EnemyState.Fire);
-        }
-        // Если игрок в зоне, но нет прямой видимости, состояние установится в Update()
     }
 
     private void SearchWalkPoint()
     {
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
-
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
         if (Physics.Raycast(walkPoint, -transform.up, 2f, groundLayer))
             walkPointSet = true;
     }
@@ -224,35 +261,25 @@ public class EnemyManager : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        if (currentHealth < 0)
-        {
-            Die();
-        }
+        if (currentHealth < 0) Die();
     }
 
     public void Die()
     {
         Dead = true;
+        
         anim.SetInteger("Death", Random.Range(0, 4));
         Invoke(nameof(DisableAnimatorAndObject), 0.7f);
+        agent.enabled = false;  
     }
 
     private void DisableAnimatorAndObject()
     {
         anim.SetBool("Dead", true);
         this.enabled = false;
-        //anim.enabled = false;
-        //gameObject.SetActive(false);
     }
 
-
-
-
-
-    public void DestroyEnemy()
-    {
-        Destroy(gameObject);
-    }
+    public void DestroyEnemy() => Destroy(gameObject);
 
     private void OnDrawGizmosSelected()
     {
@@ -261,7 +288,6 @@ public class EnemyManager : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
 
-        // Отображение прямой видимости
         if (player != null)
         {
             Gizmos.color = hasLineOfSight ? Color.green : Color.magenta;
@@ -269,6 +295,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    // ========== ПУЛ ТРАССЕРОВ (переработан) ==========
     private void InitializeTracePool()
     {
         for (int i = 0; i < tracePoolSize; i++)
@@ -278,26 +305,26 @@ public class EnemyManager : MonoBehaviour
             TraceEffect effect = obj.GetComponent<TraceEffect>();
             if (effect != null)
             {
-                TraceEffect captured = effect;
-                captured.OnComplete += (captured) => tracePool.Enqueue(captured);
-                tracePool.Enqueue(captured);
+                effect.OnComplete += (e) => tracePool.Enqueue(e);
+                tracePool.Enqueue(effect);
             }
         }
     }
 
-    private void DrawShotLine()
+    // Теперь принимает начальную и конечную точку
+    private void DrawShotLine(Vector3 start, Vector3 end)
     {
         if (tracePool.Count > 0)
         {
             TraceEffect effect = tracePool.Dequeue();
-            effect.Play(weaponMuzzle.position, player.transform.position);
+            effect.Play(start, end);
         }
     }
 
+    // ========== ПОЗИЦИЯ ОРУЖИЯ И АНИМАЦИИ ==========
     public void SetWeaponPosition(int state)
     {
         Transform weapon = weaponObject.transform;
-
         switch (state)
         {
             case 0: // Idle
@@ -347,7 +374,6 @@ public class EnemyManager : MonoBehaviour
                 SetWeaponPosition(2);
                 break;
         }
-
         currentState = newState;
     }
 

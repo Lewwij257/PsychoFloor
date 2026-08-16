@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight = 2f;
     public float gravity = -50f;
 
+    public int maxHealth = 500;
+    public int currentHealth = 500;
     
 
 
@@ -54,6 +56,19 @@ public class PlayerController : MonoBehaviour
 
 
 
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth < 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        GameManager.Instance.GameOver();
+    }
 
     public void DealDamage(EnemyManager target, int damage)
     {
