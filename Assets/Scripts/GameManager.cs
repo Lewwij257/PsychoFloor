@@ -29,6 +29,14 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+
+
+
+
+        EnemyManager[] enemiesInLevel = FindObjectsByType<EnemyManager>();
+
+
+
     }
 
 

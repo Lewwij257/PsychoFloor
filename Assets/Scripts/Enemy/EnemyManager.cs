@@ -57,6 +57,8 @@ public class EnemyManager : MonoBehaviour
     }
     private EnemyState currentState = EnemyState.Idle;
 
+    [SerializeField] public Transform weaponMuzzle;
+
     private Animator anim;
 
     private void Awake()
@@ -69,6 +71,10 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         player = GameManager.Instance.Player.transform;
+        if (gameManager == null)
+        {
+            gameManager = GameManager.Instance;
+        }
     }
 
     private void Update()
@@ -212,10 +218,17 @@ public class EnemyManager : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth < 0)
         {
-            anim.SetTrigger("Death");
-            Invoke(nameof(DestroyEnemy), 2f);
+            Die();
         }
     }
+
+    public void Die()
+    {
+        anim.SetTrigger("Death");
+        Invoke(nameof(DestroyEnemy), 2f);
+    }
+
+
 
     public void DestroyEnemy()
     {
@@ -258,7 +271,7 @@ public class EnemyManager : MonoBehaviour
         if (tracePool.Count > 0)
         {
             TraceEffect effect = tracePool.Dequeue();
-            effect.Play(transform.position, player.transform.position);
+            effect.Play(weaponMuzzle.position, player.transform.position);
         }
     }
 

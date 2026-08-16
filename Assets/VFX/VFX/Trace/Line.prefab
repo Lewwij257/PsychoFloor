@@ -156,6 +156,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   lineRenderer: {fileID: 0}
-  duration: 0.25
-  appearTime: 0.05
-  holdTime: 0.05
+  duration: 0.1
+  appearTime: 0.02
+  holdTime: 0.02
