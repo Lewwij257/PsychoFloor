@@ -11,6 +11,7 @@ public class ShowInteractionLevel1 : MonoBehaviour
     [SerializeField] PlayerController playerController;
     [SerializeField] DialogueSystem dialogueSystem;
     [SerializeField] AudioSource audioSiren;
+    [SerializeField] GameObject SpecialTimeGO;
 
     public void ShowInteractionText()
     {
@@ -38,6 +39,7 @@ public class ShowInteractionLevel1 : MonoBehaviour
                 dialogueSystem.gameObject.SetActive(true);
                 dialogueSystem.ShowDialogueAuto("Немедленно прекратите сопротивление и вернитесь к рабочему месту.");
                 audioSiren.gameObject.SetActive(true);
+                SpecialTimeGO.SetActive(true);
                 this.gameObject.SetActive(false);
                 
             }

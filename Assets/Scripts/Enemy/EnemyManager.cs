@@ -4,6 +4,9 @@ using UnityEngine.AI;
 
 public class EnemyManager : MonoBehaviour
 {
+
+    [SerializeField] public bool BLOCK_PATROOL = false;
+
     [Header("Movement")]
     public float currentCharacterSpeed;
     public float walkSpeed = 5f;
@@ -27,6 +30,8 @@ public class EnemyManager : MonoBehaviour
 
     [Header("Line of Sight")]
     public LayerMask obstacleMask;
+
+    [SerializeField] public AudioSource audioSource;
 
     private bool hasLineOfSight = false;
     private bool Dead = false;
@@ -89,7 +94,17 @@ public class EnemyManager : MonoBehaviour
         if (!playerInSightRange && !playerInAttackRange)
         {
             Patroling();
-            SetAnimation(EnemyState.Walk);
+
+            if (BLOCK_PATROOL)
+            {
+                SetAnimation(EnemyState.Idle);
+            }
+            else
+            {
+                SetAnimation(EnemyState.Walk);
+
+            }
+
         }
         else if (playerInSightRange && !playerInAttackRange)
         {
@@ -111,6 +126,42 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    //private void Update()
+    //{
+    //    playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerLayer);
+    //    playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
+
+    //    if (Dead) return;
+
+    //    CheckLineOfSight();
+
+    //    agent.updateRotation = true;
+
+    //    if (!playerInSightRange && !playerInAttackRange)
+    //    {
+    //        Patroling();
+    //        // SetAnimation теперь вызывается внутри Patroling()
+    //    }
+    //    else if (playerInSightRange && !playerInAttackRange)
+    //    {
+    //        ChasePlayer();
+    //        SetAnimation(EnemyState.Run);
+    //    }
+    //    else if (playerInAttackRange && playerInSightRange)
+    //    {
+    //        if (hasLineOfSight)
+    //        {
+    //            AttackPlayer();
+    //            SetAnimation(EnemyState.Fire);
+    //        }
+    //        else
+    //        {
+    //            ChasePlayer();
+    //            SetAnimation(EnemyState.Run);
+    //        }
+    //    }
+    //}
+
     private void CheckLineOfSight()
     {
         if (player == null) { hasLineOfSight = false; return; }
@@ -128,13 +179,25 @@ public class EnemyManager : MonoBehaviour
 
     private void Patroling()
     {
-        if (!walkPointSet) SearchWalkPoint();
-        if (walkPointSet) agent.SetDestination(walkPoint);
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        if (distanceToWalkPoint.magnitude < 1)
+        if (!BLOCK_PATROOL)
         {
-            walkPointSet = false;
+            if (!walkPointSet) SearchWalkPoint();
+            if (walkPointSet) agent.SetDestination(walkPoint);
+            Vector3 distanceToWalkPoint = transform.position - walkPoint;
+            if (distanceToWalkPoint.magnitude < 1)
+            {
+                walkPointSet = false;
+            }
+        }
+        else
+        {
             SetAnimation(EnemyState.Idle);
+            // Остановить движение
+            if (agent.hasPath || agent.velocity.sqrMagnitude > 0.01f)
+            {
+                agent.ResetPath();   // или agent.SetDestination(transform.position);
+            }
+            walkPointSet = false;    // сброс для будущего патрулирования
         }
     }
 
@@ -169,6 +232,9 @@ public class EnemyManager : MonoBehaviour
     // ========== НОВЫЙ МЕТОД СТРЕЛЬБЫ ==========
     private void PerformShot()
     {
+
+        audioSource.Play();
+
         if (player == null) return;
 
         // Направление от дула к игроку
