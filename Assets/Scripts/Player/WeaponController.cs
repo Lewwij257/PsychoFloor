@@ -31,7 +31,6 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         playerController = GameManager.Instance.Player.GetComponent<PlayerController>();
-        Debug.Log(playerController);
         currentAmmo = maxAmmo;
     }
 
@@ -64,7 +63,6 @@ public class WeaponController : MonoBehaviour
         // Стрельба (только если не перезарядка, есть патроны)
         if (!isReloading && isFiring && canFire && !wasFiring && currentAmmo > 0)
         {
-            Debug.Log("1");
             Fire();
             canFire = false;
             fireCooldown = fireRate;

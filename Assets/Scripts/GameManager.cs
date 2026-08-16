@@ -41,8 +41,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(Player);
-        Debug.Log(Player.GetComponent<PlayerController>());
+
     }
 
 

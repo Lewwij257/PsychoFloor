@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -106,5 +107,14 @@ public class ElevatorController : MonoBehaviour
     {
         door1Animator.SetTrigger("CloseDoors");
         door2Animator.SetTrigger("CloseDoors");
+
+        StartCoroutine(ToTheNextLevel());
+    }
+
+    public IEnumerator ToTheNextLevel()
+    {
+        yield return new WaitForSeconds(5);
+        GlobalGameManager.Instance.NextLevel();
+
     }
 }

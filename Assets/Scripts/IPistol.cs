@@ -11,7 +11,6 @@ public class Pistol : WeaponBase
 
     public override void FireOnce()
     {
-        Debug.Log("=== FIRE ONCE CALLED ===");
 
         
 

@@ -263,12 +263,10 @@ public class EnemyManager : MonoBehaviour
     {
         currentHealth -= damage;
         if (currentHealth < 0) Die();
-        Debug.Log("Damage: " + damage);
     }
 
     public void Die()
     {
-        Debug.Log("Die: ");
         Dead = true;
         anim.SetInteger("Death", Random.Range(0, 4));
         Debug.Log(Random.Range(0, 4));
