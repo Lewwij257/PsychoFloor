@@ -1,26 +1,27 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     public LayerMask PlayerLayer;
-
 
     public int enemiesKilledOnCurrentFloor;
     public int damageDealedOnCurrentFloor;
     public int headshotsOnCurrentFloor;
     public int damageTakenOnCurrentFloor;
     public int hitsOnCurrentFloor;
-    public int missesOnCurrentFloor;
+    public int shotsOnCurrentFloor;
     public float startTime;
     public float stopTime;
 
     public GameObject DeathPanel;
 
-
     public static GameManager Instance { get; private set; }
 
     [SerializeField] public GameObject Player;
+
+    // Список всех живых врагов
+    public List<EnemyManager> Enemies = new List<EnemyManager>();
 
     void Awake()
     {
@@ -32,16 +33,9 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-
-
-
-        EnemyManager[] enemiesInLevel = FindObjectsByType<EnemyManager>();
-
-
-
+        // Явный поиск не требуется – враги сами регистрируются в Start
+        // EnemyManager[] enemiesInLevel = FindObjectsByType<EnemyManager>();
     }
-
-
 
     public void GameOver()
     {
@@ -51,6 +45,11 @@ public class GameManager : MonoBehaviour
     /// LEVEL/ GAME? STATISTICKS
     /// 
 
+
+    public void SaveStatistics()
+    {
+
+    }
 
     public void RegisterEnemyKilled()
     {
@@ -74,12 +73,12 @@ public class GameManager : MonoBehaviour
 
     public void RegisterHit()
     {
-        hitsOnCurrentFloor+= 1; 
+        hitsOnCurrentFloor += 1;
     }
 
-    public void RegisterMiss()
+    public void RegisterShot()
     {
-        missesOnCurrentFloor+= 1;
+        shotsOnCurrentFloor += 1;
     }
 
     public void StartRegisterTime()
@@ -92,4 +91,17 @@ public class GameManager : MonoBehaviour
         stopTime = Time.time;
     }
 
+    // Добавление врага в список
+    public void RegisterEnemy(EnemyManager enemy)
+    {
+        if (!Enemies.Contains(enemy))
+            Enemies.Add(enemy);
+    }
+
+    // Удаление врага из списка (при смерти)
+    public void UnregisterEnemy(EnemyManager enemy)
+    {
+        if (Enemies.Contains(enemy))
+            Enemies.Remove(enemy);
+    }
 }

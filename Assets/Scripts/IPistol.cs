@@ -9,6 +9,10 @@ public class Pistol : WeaponBase
 
     public override void FireOnce()
     {
+
+
+        GameManager.Instance.shotsOnCurrentFloor += 1;
+
         Ray ray = new Ray(muzzle.position, muzzle.forward);
         RaycastHit hit;
 
@@ -38,9 +42,14 @@ public class Pistol : WeaponBase
                 {
                     case "Head":
                         finalDamage = finalDamage * 3;
+                        GameManager.Instance.hitsOnCurrentFloor += 1;
+                        GameManager.Instance.headshotsOnCurrentFloor += 1;
+                        GameManager.Instance.damageDealedOnCurrentFloor += finalDamage;
                         break;
                     case "Torso":
-                        // Можно оставить как есть или добавить множитель
+                        GameManager.Instance.hitsOnCurrentFloor += 1;
+                        GameManager.Instance.damageDealedOnCurrentFloor += finalDamage;
+
                         break;
                     default:
                         break;
