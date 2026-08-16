@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class ElevatorController : MonoBehaviour
@@ -11,6 +12,14 @@ public class ElevatorController : MonoBehaviour
 
     [SerializeField] public LayerMask playerLayer;
 
+
+    [SerializeField] public TextMeshProUGUI killsText;
+    [SerializeField] public TextMeshProUGUI HeadshotsText;
+    [SerializeField] public TextMeshProUGUI HitsText;
+    [SerializeField] public TextMeshProUGUI TimeText;
+    [SerializeField] public TextMeshProUGUI DamageDealed;
+    [SerializeField] public TextMeshProUGUI DamageTaken;
+    [SerializeField] public TextMeshProUGUI Score;
 
 
 
@@ -31,10 +40,24 @@ public class ElevatorController : MonoBehaviour
         }
     }
 
+    private void ShowStatsOnUI()
+    {
+        killsText.text += GameManager.Instance.enemiesKilledOnCurrentFloor.ToString();
+        HeadshotsText.text += GameManager.Instance.headshotsOnCurrentFloor.ToString();
+        HitsText.text += GameManager.Instance.hitsOnCurrentFloor.ToString();
+        TimeText.text += 0.ToString();
+        DamageDealed.text += GameManager.Instance.damageDealedOnCurrentFloor.ToString();
+        DamageTaken.text += GameManager.Instance.damageTakenOnCurrentFloor.ToString();
+        Score.text += "!";
+
+    }
 
     private void OnPlayerEnterFront(Collider other)
     {
         if ((playerLayer.value & (1 << other.gameObject.layer)) == 0) return;
+
+        if (GameManager.Instance.Enemies.Count > 0) return;
+
         OpenDoors();
 
     }
@@ -49,7 +72,7 @@ public class ElevatorController : MonoBehaviour
     private void OnPlayerEnterElevator(Collider other)
     {
         if ((playerLayer.value & (1 << other.gameObject.layer)) == 0) return;
-
+        ShowStatsOnUI();
         CloseDoors();
     }
 

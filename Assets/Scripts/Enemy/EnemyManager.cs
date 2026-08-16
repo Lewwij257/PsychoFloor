@@ -72,6 +72,7 @@ public class EnemyManager : MonoBehaviour
     {
         player = GameManager.Instance.Player.transform;
         if (gameManager == null) gameManager = GameManager.Instance;
+        GameManager.Instance?.RegisterEnemy(this); // <-- добавить
     }
 
     private void Update()
@@ -267,10 +268,11 @@ public class EnemyManager : MonoBehaviour
     public void Die()
     {
         Dead = true;
-        
         anim.SetInteger("Death", Random.Range(0, 4));
         Invoke(nameof(DisableAnimatorAndObject), 0.7f);
-        agent.enabled = false;  
+        agent.enabled = false;
+        GameManager.Instance?.UnregisterEnemy(this); // <-- добавить
+        GameManager.Instance.enemiesKilledOnCurrentFloor += 1; // <-- добавить
     }
 
     private void DisableAnimatorAndObject()

@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        GameManager.Instance.damageTakenOnCurrentFloor += damage;
         currentHealth -= damage;
         if (currentHealth < 0)
         {
