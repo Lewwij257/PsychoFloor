@@ -10,6 +10,13 @@ public class WeaponController : MonoBehaviour
     [Header("Ammo")]
     [SerializeField] private int maxAmmo = 12;
     [SerializeField] private int totalAmmo = 48;
+
+    [SerializeField] public AudioSource pistolAudioSource;
+    [SerializeField] public AudioClip shotClip;
+    [SerializeField] public AudioClip reloadClip;
+    [SerializeField] public AudioClip bulletsOnFloorClip;
+
+
     private int currentAmmo;
 
     [Header("Reload")]
@@ -71,7 +78,7 @@ public class WeaponController : MonoBehaviour
         currentAmmo--;
         weaponSwayAndBob.Shoot();
         weapon.FireOnce();
-
+        pistolAudioSource.PlayOneShot(shotClip);
         // Автоперезарядка если патроны кончились
         if (currentAmmo == 0 && totalAmmo > 0)
             StartReload();
@@ -79,6 +86,8 @@ public class WeaponController : MonoBehaviour
 
     private void StartReload()
     {
+        pistolAudioSource.PlayOneShot(reloadClip);
+        pistolAudioSource.PlayOneShot(bulletsOnFloorClip);
         if (isReloading) return;
         isReloading = true;
         StartCoroutine(ReloadRoutine());

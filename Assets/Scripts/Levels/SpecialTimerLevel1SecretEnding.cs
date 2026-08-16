@@ -1,48 +1,67 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+using UnityEngine.UI;
 
 public class SpecialTimerLevel1SecretEnding : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private Image blackImage;            // просто Image (не Panel!)
+    [SerializeField] private float fadeDuration = 1.5f;
 
     private float idleTimer = 0f;
     private bool isIdle = false;
+    private bool isFading = false;
 
     private void Update()
     {
-        // Проверяем, стоит ли игрок на месте
+        if (isFading) return;
+
         if (playerController.move == Vector2.zero)
         {
-            // Если стоит — увеличиваем таймер
             idleTimer += Time.deltaTime;
 
-            // Если простоял 15 секунд — выполняем код
             if (idleTimer >= 15f && !isIdle)
             {
                 isIdle = true;
-                OnPlayerIdleFor15Seconds();
+                StartCoroutine(FadeAndLoadScene());
             }
         }
         else
         {
-            // Если игрок двигается — сбрасываем таймер
             idleTimer = 0f;
             isIdle = false;
         }
     }
 
-    /// <summary>
-    /// Вызывается когда игрок стоит неподвижно 15 секунд
-    /// </summary>
-    private void OnPlayerIdleFor15Seconds()
+    private IEnumerator FadeAndLoadScene()
     {
-        Debug.Log("Игрок стоит 15 секунд! Секретный контент активирован!");
+        isFading = true;
 
-        // === ТВОЙ КОД ЗДЕСЬ ===
-        // Например:
-        // - Показать диалог
-        // - Спавнить секретного врага
-        // - Активировать скрытую дверь
-        // - Воспроизвести звук
-        // - Запустить анимацию
+        // Делаем Image видимым
+        blackImage.gameObject.SetActive(true);
+
+        // Получаем цвет
+        Color color = blackImage.color;
+
+        // Затухание
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            color.a = Mathf.Clamp01(elapsed / fadeDuration);
+            blackImage.color = color;
+            yield return null;
+        }
+
+        // Убеждаемся, что полностью чёрный
+        color.a = 1f;
+        blackImage.color = color;
+
+        // Пауза
+        yield return new WaitForSeconds(0.3f);
+
+        // Загрузка сцены
+        SceneManager.LoadScene("SecretEndingScene");
     }
 }
