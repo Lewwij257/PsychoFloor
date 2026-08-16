@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaperStack
       objectReference: {fileID: 0}
+    - target: {fileID: 7694386885706856632, guid: b948c5107175b5547a1936bd188b52b9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 9188925947917384277, guid: b948c5107175b5547a1936bd188b52b9, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.30916366
@@ -138,6 +142,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Calendar
       objectReference: {fileID: 0}
+    - target: {fileID: 7065659754421342754, guid: b640f68daa34f054db3d9be1c4e7ae64, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -159,6 +167,10 @@ PrefabInstance:
     - target: {fileID: 3940715102135184535, guid: 30cef14abace94c4d830bf90c29ff766, type: 3}
       propertyPath: m_Name
       value: Locker
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940715102135184535, guid: 30cef14abace94c4d830bf90c29ff766, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8417912792912761406, guid: 30cef14abace94c4d830bf90c29ff766, type: 3}
       propertyPath: m_LocalScale.x
@@ -234,6 +246,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Folder
       objectReference: {fileID: 0}
+    - target: {fileID: 671753332308583651, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8436038305668001179, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13113403
@@ -307,6 +323,10 @@ PrefabInstance:
     - target: {fileID: 671753332308583651, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
       propertyPath: m_Name
       value: Folder (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 671753332308583651, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8436038305668001179, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
       propertyPath: m_LocalScale.x
@@ -434,6 +454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cup
       objectReference: {fileID: 0}
+    - target: {fileID: 7794034039839654624, guid: b6158553763a645418fc7826a8d41f80, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -455,6 +479,10 @@ PrefabInstance:
     - target: {fileID: 671753332308583651, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
       propertyPath: m_Name
       value: Folder (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 671753332308583651, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8436038305668001179, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
       propertyPath: m_LocalScale.x
@@ -530,6 +558,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Folder (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 671753332308583651, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8436038305668001179, guid: 6a5ee5c1baf8fca4dbf7c678c7cb7ee6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13113403
@@ -602,7 +634,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2110665120976963402, guid: f42c7e99474b4a2428fb7a840f8cd36d, type: 3}
       propertyPath: m_Name
-      value: Table2 Variant
+      value: V4 1Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 2110665120976963402, guid: f42c7e99474b4a2428fb7a840f8cd36d, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8949809568291859699, guid: f42c7e99474b4a2428fb7a840f8cd36d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -748,6 +784,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Computer Monitor OLD
       objectReference: {fileID: 0}
+    - target: {fileID: 735471736691306026, guid: 5965170d5ef13064b8069504efde50ba, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -821,6 +861,10 @@ PrefabInstance:
     - target: {fileID: 5013124297808352990, guid: 2b26162ba1bf0834cbf442f2e8b8a23f, type: 3}
       propertyPath: m_Name
       value: Pen
+      objectReference: {fileID: 0}
+    - target: {fileID: 5013124297808352990, guid: 2b26162ba1bf0834cbf442f2e8b8a23f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
