@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5333187339841138983
+--- !u!1 &3240719842528612694
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1990713056088356203}
-  - component: {fileID: 9078974513887373286}
-  - component: {fileID: 5898474717206702973}
-  - component: {fileID: 474433177864150510}
+  - component: {fileID: 7934274913536849904}
+  - component: {fileID: 7925044974550218338}
+  - component: {fileID: 7366495293562859760}
   m_Layer: 0
-  m_Name: Cooler
+  m_Name: Clock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1990713056088356203
+--- !u!4 &7934274913536849904
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5333187339841138983}
+  m_GameObject: {fileID: 3240719842528612694}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
-  m_LocalPosition: {x: -6.0357466, y: 0.3173074, z: -0.09797865}
-  m_LocalScale: {x: 23.231318, y: 23.231314, z: 23.231314}
+  m_LocalRotation: {x: 0.000000021855696, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.262, y: 2.35, z: -2.4659169}
+  m_LocalScale: {x: 65.995316, y: 65.995316, z: 65.995316}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
---- !u!33 &9078974513887373286
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7925044974550218338
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5333187339841138983}
-  m_Mesh: {fileID: -565594207501566506, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
---- !u!23 &5898474717206702973
+  m_GameObject: {fileID: 3240719842528612694}
+  m_Mesh: {fileID: 2797687578962592920, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
+--- !u!23 &7366495293562859760
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5333187339841138983}
+  m_GameObject: {fileID: 3240719842528612694}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -67,14 +66,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 9101280890363022628, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
-  - {fileID: -1637880222114644024, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
-  - {fileID: 3016479151454471876, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
-  - {fileID: -8705533452240791338, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
-  - {fileID: 3780671244086486322, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
   - {fileID: 8975480819012031255, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
-  - {fileID: 637949407474519127, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
-  - {fileID: -2813467912831258332, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
+  - {fileID: 2413751341462511734, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
+  - {fileID: -8583780622465393609, guid: 42aab744d129a144bb69b5cb968c1e7d, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,24 +92,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &474433177864150510
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5333187339841138983}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.032109186, y: 0.02814199, z: 0.08344495}
-  m_Center: {x: 0.0023277923, y: -0.00013992959, z: 0.030549174}
