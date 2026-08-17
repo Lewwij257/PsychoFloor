@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -67,6 +68,13 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         DeathPanel.SetActive(true);
+        StartCoroutine(DeathCoroutine());
+    }
+
+    private IEnumerator DeathCoroutine()
+    {
+        yield return new WaitForSeconds(3);
+        GlobalGameManager.Instance.StartNewGame();
     }
 
     /// LEVEL/ GAME? STATISTICKS

@@ -48,6 +48,11 @@ public class EnemyManager : MonoBehaviour
     public float timeBetweenAttacks;
     public bool alreadyAttacked;
 
+
+    [SerializeField] public Collider Torso;
+    [SerializeField] public Collider Head;
+
+
     // states
     public float attackRange, sightRange;
     public bool playerInAttackRange, playerInSightRange;
@@ -338,6 +343,26 @@ public class EnemyManager : MonoBehaviour
         Debug.Log(Random.Range(0, 4));
         Invoke(nameof(DisableAnimatorAndObject), 0.7f);
         agent.enabled = false;
+
+
+
+
+
+
+
+
+        Torso.enabled = false;
+        Head.enabled = false;
+
+
+
+
+
+
+
+
+
+
         GameManager.Instance?.UnregisterEnemy(this); // <-- добавить
         GameManager.Instance.enemiesKilledOnCurrentFloor += 1; // <-- добавить
     }

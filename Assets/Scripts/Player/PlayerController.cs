@@ -24,8 +24,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     public bool fire;
 
+    private AudioSource audioSource;
+
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         characterController = GetComponent<CharacterController>();
         cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
         currentCharacterSpeed = walkSpeed;
@@ -66,6 +69,10 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.damageTakenOnCurrentFloor += damage;
         currentHealth -= damage;
+
+        audioSource.pitch = Random.Range(0.8f, 1.2f);
+        audioSource.Play();
+
         if (currentHealth < 0)
         {
             Die();

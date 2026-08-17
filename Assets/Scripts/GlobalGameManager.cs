@@ -104,6 +104,8 @@ public class GlobalGameManager : MonoBehaviour
         {
             // GameManager.Instance.ResetStats();
         }
+        currentLevelIndex = 0;
+
         LoadLevel(0);
     }
 

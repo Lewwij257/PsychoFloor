@@ -51,7 +51,7 @@ public class WeaponController : MonoBehaviour
 
 
 
-        //Debug.Log(GameManager.Instance.Player.GetComponent<PlayerController>().fire);
+        Debug.Log(GameManager.Instance.Player.GetComponent<PlayerController>().fire);
         bool isFiring = GameManager.Instance.Player.GetComponent<PlayerController>().fire;
 
 
