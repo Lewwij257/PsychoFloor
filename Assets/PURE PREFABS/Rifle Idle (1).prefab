@@ -1407,6 +1407,8 @@ MonoBehaviour:
   walkPointRange: 5
   timeBetweenAttacks: 1
   alreadyAttacked: 0
+  Torso: {fileID: 1614881003420002028}
+  Head: {fileID: 138877743534926644}
   attackRange: 12
   sightRange: 20
   playerInAttackRange: 0
