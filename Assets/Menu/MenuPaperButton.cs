@@ -49,12 +49,21 @@ public class MenuPaper : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //if (!enabledInteraction)
-        //    return;
 
-        //onClick?.Invoke();
+        if(gameObject.name == "Play")
+        {
+            GlobalGameManager.Instance.StartNewGame();
+        }
 
-        GlobalGameManager.Instance.StartNewGame();
+        else
+        {
+            if (!enabledInteraction)
+                return;
+
+            onClick?.Invoke();
+        }
+
+
 
     }
 

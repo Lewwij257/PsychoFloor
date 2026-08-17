@@ -81,12 +81,12 @@ public class PauseManager : MonoBehaviour
         // Загружаем главное меню через GameManager
         if (GameManager.Instance != null)
         {
-            SceneManager.LoadScene("MainMenu"); // название вашей сцены меню
+            SceneManager.LoadScene("Menu"); // название вашей сцены меню
         }
         else
         {
             // Fallback
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Menu");
         }
     }
 }
